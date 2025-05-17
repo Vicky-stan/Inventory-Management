@@ -27,3 +27,23 @@ This project involves the analysis of inventory data. The tasks to be completed 
 - What are the inventory holding period of top selling products?
 
 ## About the Dataset
+The dataset contains 17 columns and 5001 rows. Each data entry represents an information about the product inventory with a product unique identifier. 
+Link to dataset
+The columns are described as follows;
+- ProductID: A unique identifier for each product
+- ProductName: The name of each product.
+- Category: Specific grouping of each product into a category.
+- Unit_Price: Price per unit of the product.
+- Stock_quantity: Current quantity of the product in stock.
+- Stock level: Stock level classification (e.g low, mid, High).
+- Reorder Point: Minimum quantity before reordering is triggered.
+- Lead Time: Days required to receieve the product after placing an order
+- Last Restock date: Last date the product was restocked.
+- Supplier ID: ID of the supplier providing the product.
+- Warehouse Location: Location or aisle of the product in the warehouse.
+- Minimum Order Quantity: Minimum number of units that can be ordered from the supplier.
+- Stock Status: Stock status of the item (Whether the product is in-stock or out-of-stock).
+- Entry Date: Date the item was first entered into the inventory system.
+- Country: Country where the warehouse is located or supplier operates.
+- Latitude: Geolocation latitude of the product warehouse or origin.
+- Longititude: Geolocation longititude of the product warehouse or origin.
