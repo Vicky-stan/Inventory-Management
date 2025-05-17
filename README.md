@@ -22,9 +22,9 @@ This project involves the analysis of inventory data. The tasks to be completed 
 - Determine the products that are at risk of going out-of-stock in the next 2 weeks.
 - Determine the products with high inventory value (Unit_Price × Stock_Quantity). 
 - Identify suppliers responsible for stockouts.
-- Are there regional demand patterns affecting stock levels.
-- What is the total number of stock quantity every month?
 - What are the inventory holding period of top selling products?
+- What percentage of inventory is classified as dead stock or slow-moving?
+- Are there regional demand patterns affecting stock levels.
 
 ## About the Dataset
 The dataset contains 17 columns and 5001 rows. Each data entry represents an information about the product inventory with a product unique identifier. 
@@ -164,4 +164,50 @@ WHERE
 GROUP BY 
     Supplier_ID
 ORDER BY Stockout_products DESC, Avg_lead_time DESC
+```
+9. What are the inventory holding period of top selling products?
+```
+SELECT TOP 10
+	Product_ID,
+	Product_Name,
+	DATEDIFF(DAY, Entry_Date, Last_Restock_Date) AS Holding_period
+FROM Inventory
+ORDER BY Holding_period  DESC 
+```
+10. What percentage of inventory is classified as dead stock or slow-moving?
+```
+SELECT 
+    COUNT(*) AS Total_Products,
+    SUM(CASE 
+            WHEN Status = 'In Stock' AND Last_Restock_Date < DATEADD(DAY, -180, GETDATE()) 
+            THEN 1 
+            ELSE 0 
+
+        END) AS Slow_Moving_Products,
+    CAST(
+        100.0 * SUM(CASE 
+                        WHEN Status = 'In Stock' AND Last_Restock_Date < DATEADD(DAY, -180, GETDATE()) 
+                        THEN 1 
+                        ELSE 0 
+                    END) / COUNT(*) 
+        AS DECIMAL(5,2)
+    ) AS Slow_Moving_Percentage
+FROM 
+    Inventory
+```
+11. Rank products within each category by inventory value
+```
+SELECT 
+    Category,
+    Product_ID,
+    Product_Name,
+    Stock_Quantity,
+    Unit_Price,
+    (Stock_Quantity * Unit_Price) AS Inventory_Value,
+    RANK() OVER (
+        PARTITION BY Category 
+        ORDER BY (Stock_Quantity * Unit_Price) DESC
+    ) AS Inventory_Value_Rank
+FROM 
+    Inventory;
 ```
